@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import FormModal from "./comp/ModalForm";
+import { Button } from "react-bootstrap";
+import CreateField from "./comp/CreateField";
+import CreateTable from "./comp/Answers";
 
-function App() {
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState([]);
+
+  useEffect(()=>{
+    console.log('use effect', data);
+  }, [open, data]);
+
+  function doSubmit (value) {
+    setOpen(false)
+    setData(value)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        {open && (
+            <FormModal
+                onCancel={() => setOpen(false)}
+                show={open}
+                Content={<CreateField doSubmit={doSubmit}/>}
+            />
+        )}
+        <CreateTable data={data} />
+        <Button onClick={() => setOpen(true)}>Start test</Button>
+      </div>
   );
 }
-
-export default App;
